@@ -1,0 +1,70 @@
+<% layout("layouts/boilerplate.ejs") %>
+<div class="row">
+  <div class="col-8 offset-2">
+    <div class="card">
+      <br>
+      <h3><%= listing.title %></h3>
+      <img src="<%= listing.image %>" class="card-img-top show-image" alt="Property Image">
+      <div class="card-body">
+        <p class="card-text">
+          <%= listing.description %> <br>
+          &#8377; <%= listing.price.toLocaleString("en-IN") %> <br>
+          <%= listing.location %> <br>
+          <%= listing.country %>
+        </p>
+      </div>
+    </div>
+
+    <br>
+    <a href="/listings/<%= listing._id %>/edit" class="btn btn-primary">Edit this Listing</a>
+    <br><br>
+    <form action="/listings/<%= listing._id %>/delete" method="POST">
+      <button type="submit" class="btn btn-danger">Delete Property</button>
+    </form>
+    <hr>
+  </div>
+
+  <div class="col-8 offset-2">
+    <h4>Leave a Review</h4>
+    <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
+      <div class="mb-3">
+        <label for="rating" class="form-label">
+          <input required type="range" min="1" max="5" id="rating" class="form-range" name="review[rating]">
+        </label>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="comment">Comments</label>
+        <textarea required class="form-control" name="review[comment]" id="comment" cols="30" rows="10" style="resize: none;"></textarea>
+        <div class="invalid-feedback">Please enter your comments</div>
+      </div>
+      <br>
+      <button class="btn btn-outline-dark mb-3">Submit</button>
+      <br>
+    </form>
+    <hr>
+
+    <h4>All Reviews for <%= listing.title %></h4>
+    <% if (listing.reviews && Array.isArray(listing.reviews) && listing.reviews.length > 0) { %>
+      <% listing.reviews.forEach((review) => { %>
+        <div class="card mb-3">
+          <div class="review-card-body">
+            <h5>Rating: <%= review.rating %>/5</h5>
+            <p><strong>Comment:</strong> <%= review.comment %></p>
+            <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>/delete" method="POST">
+              <button type="submit" class="btn btn-danger">Delete Review</button>
+            </form>
+          </div>
+        </div>
+      <% }); %>
+    <% } else { %>
+      <p><em>This property has no reviews yet. Be the first to leave a review!</em></p>
+    <% } %>
+  </div>
+</div>
+
+
+
+
+
+
+
